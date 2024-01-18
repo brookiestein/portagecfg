@@ -34,3 +34,6 @@ You can also combine some use flags by just appending another -u per use flag. T
 That'll write `app-emulation/qemu usbredir alsa bzip2` into `/etc/portage/package.use/qemu`, and
 
 `app-emulation/qemu ~amd64` into `/etc/portage/package.accept_keywords/qemu`
+
+## Help
+![Help](screenshots/help.png)

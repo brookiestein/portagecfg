@@ -27,13 +27,6 @@ int main(int argc, char* argv[])
 		return ERROR_CODES::NOT_ENOUGH_ARGS;
 	}
 
-	if (geteuid() != 0) {
-		std::cerr << "No enough rights, you must run me as root.\n";
-		std::clog << "What I'm going to do is to write in portage's folder,\n"
-			"and that directory belongs to root, so I need rights to write in them." << std::endl;
-		return ERROR_CODES::NOT_ENOUGH_PERMISSIONS;
-	}
-
 	const char* const short_options { "l:k:p:u:" };
 	const struct option long_options[] = {
 		{ "help",	no_argument,		nullptr,	'h' },
@@ -70,6 +63,13 @@ int main(int argc, char* argv[])
 		default:
 			std::cerr << "Unknown option." << std::endl;
 		}
+	}
+
+	if (geteuid() != 0) {
+		std::cerr << "No enough rights, you must run me as root.\n";
+		std::clog << "What I'm going to do is to write in portage's folder,\n"
+			"and that directory belongs to root, so I need rights to write in them." << std::endl;
+		return ERROR_CODES::NOT_ENOUGH_PERMISSIONS;
 	}
 
 	writeConfig(package, licenses, CONFIG::LICENSE);
