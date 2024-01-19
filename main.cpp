@@ -20,14 +20,14 @@ int main(int argc, char* argv[])
 
     const char* const short_options { "hml:k:p:Uu:v" };
     const struct option long_options[] = {
-        { "help",	    no_argument,		nullptr,	'h' },
+        { "help",       no_argument,        nullptr,	'h' },
         { "mask",       no_argument,        nullptr,    'm' },
-        { "license",	required_argument,	nullptr,	'l' },
-        { "keyword",	required_argument,	nullptr,	'k' },
-        { "package",	required_argument,	nullptr,	'p' },
+        { "license",    required_argument,  nullptr,	'l' },
+        { "keyword",    required_argument,  nullptr,	'k' },
+        { "package",    required_argument,  nullptr,	'p' },
         { "unmask",     no_argument,        nullptr,    'U' },
-        { "useflag",	required_argument,	nullptr,	'u' },
-        { "version",	no_argument,		nullptr,	'v' },
+        { "useflag",    required_argument,  nullptr,	'u' },
+        { "version",    no_argument,        nullptr,	'v' },
         { nullptr }
     };
 
