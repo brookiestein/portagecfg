@@ -1,90 +1,18 @@
+#include "portagecfg.hpp"
+#include "version.hpp"
+
 #include <iostream>
 #include <fstream>
-#include <string>
-#include <vector>
-
-#include <getopt.h>
-#include <unistd.h>
-
-enum CONFIG {
-	LICENSE, KEYWORD, USEFLAG
-};
-
-enum ERROR_CODES {
-	SUCCESS = 0,
-	NOT_ENOUGH_ARGS,
-	NOT_ENOUGH_PERMISSIONS,
-	PACKAGE_NOT_PROVIDED
-};
-
-void usage(const std::string& name);
-bool writeConfig(const std::string& package, const std::vector<std::string>& value, CONFIG cfg);
-
-int main(int argc, char* argv[])
-{
-	if (argc == 1) {
-		usage(argv[0]);
-		return ERROR_CODES::NOT_ENOUGH_ARGS;
-	}
-
-	const char* const short_options { "l:k:p:u:" };
-	const struct option long_options[] = {
-		{ "help",	no_argument,		nullptr,	'h' },
-		{ "license",	required_argument,	nullptr,	'l' },
-		{ "keyword",	required_argument,	nullptr,	'k' },
-		{ "package",	required_argument,	nullptr,	'p' },
-		{ "useflag",	required_argument,	nullptr,	'u' },
-		{ nullptr }
-	};
-
-	std::vector<std::string> licenses {};
-	std::vector<std::string> keywords {};
-	std::string package {};
-	std::vector<std::string> useflags {};
-
-	int opt {};
-	while ((opt = getopt_long(argc, argv, short_options, long_options, nullptr)) != -1) {
-		switch (opt) {
-		case 'h':
-			usage(argv[0]);
-			return ERROR_CODES::SUCCESS;
-		case 'l':
-			licenses.push_back(std::string(optarg));
-			break;
-		case 'k':
-			keywords.push_back(std::string(optarg));
-			break;
-		case 'p':
-			package = std::string(optarg);
-			break;
-		case 'u':
-			useflags.push_back(std::string(optarg));
-			break;
-		default:
-			std::cerr << "Unknown option." << std::endl;
-		}
-	}
-
-	if (geteuid() != 0) {
-		std::cerr << "No enough rights, you must run me as root.\n";
-		std::clog << "What I'm going to do is to write in portage's folder,\n"
-			"and that directory belongs to root, so I need rights to write in them." << std::endl;
-		return ERROR_CODES::NOT_ENOUGH_PERMISSIONS;
-	}
-
-	writeConfig(package, licenses, CONFIG::LICENSE);
-	writeConfig(package, keywords, CONFIG::KEYWORD);
-	writeConfig(package, useflags, CONFIG::USEFLAG);
-
-}
 
 void usage(const std::string& name)
 {
 	std::cout << name << ": usage:\n" << std::endl;
+	std::cout << "-h | --help" << "\t\t\t\t" << "Shows this help.\n";
 	std::cout << "-l | --license <license>" << "\t\t" << "Write given license to portage's licenses folder.\n";
 	std::cout << "-k | --keyword <keyword>" << "\t\t" << "Write given keyword to portage's keywords folder.\n";
 	std::cout << "-p | --package <category/package_name>" << '\t' << "The package in question. This option is mandatory!\n";
 	std::cout << "-u | --useflag <use flag>" << "\t\t" << "Write given use flag to portage's use flags folder.\n";
+	std::cout << "-v | --version" << "\t\t\t\t" << "Shows this program's version." << std::endl;
 }
 
 bool writeConfig(const std::string& package,
@@ -127,4 +55,9 @@ bool writeConfig(const std::string& package,
 	file.flush();
 
 	return true;
+}
+
+void version(const std::string& name)
+{
+	std::cout << name << " version " << VERSION << std::endl;
 }
