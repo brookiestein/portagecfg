@@ -18,8 +18,10 @@ int main(int argc, char* argv[])
         return ERROR_CODES::NOT_ENOUGH_ARGS;
     }
 
-    const char* const short_options { "hml:k:p:Uu:v" };
+    const char* const short_options { "c:f:hml:k:p:Uu:v" };
     const struct option long_options[] = {
+        { "comment",    required_argument,  nullptr,    'c' },
+        { "filename",   required_argument,  nullptr,    'f' },
         { "help",       no_argument,        nullptr,	'h' },
         { "mask",       no_argument,        nullptr,    'm' },
         { "license",    required_argument,  nullptr,	'l' },
@@ -31,6 +33,8 @@ int main(int argc, char* argv[])
         { nullptr }
     };
 
+    std::vector<std::string> comments;
+    std::string filename {};
     bool mask {false};
     std::vector<std::string> licenses {};
     std::vector<std::string> keywords {};
@@ -41,6 +45,12 @@ int main(int argc, char* argv[])
     int opt {};
     while ((opt = getopt_long(argc, argv, short_options, long_options, nullptr)) != -1) {
         switch (opt) {
+        case 'c':
+            comments.push_back(std::string(optarg));
+            break;
+        case 'f':
+            filename = std::string(optarg);
+            break;
         case 'h':
             usage(name);
             return ERROR_CODES::SUCCESS;
@@ -91,12 +101,11 @@ int main(int argc, char* argv[])
     }
 
     if (mask)
-        writeConfig(package, { "" }, CONFIG::MASK);
+        writeConfig(package, { "" }, CONFIG::MASK, comments, filename);
     else if (unmask)
-        writeConfig(package, { "" }, CONFIG::UNMASK);
+        writeConfig(package, { "" }, CONFIG::UNMASK, comments, filename);
 
-    writeConfig(package, licenses, CONFIG::LICENSE);
-    writeConfig(package, keywords, CONFIG::KEYWORD);
-    writeConfig(package, useflags, CONFIG::USEFLAG);
+    writeConfig(package, licenses, CONFIG::LICENSE, comments, filename);
+    writeConfig(package, keywords, CONFIG::KEYWORD, comments, filename);
+    writeConfig(package, useflags, CONFIG::USEFLAG, comments, filename);
 }
-

@@ -17,7 +17,11 @@ enum ERROR_CODES {
 };
 
 void usage(const std::string& name);
-bool writeConfig(const std::string& package, const std::vector<std::string>& values, CONFIG cfg);
+bool writeConfig(const std::string& package,
+            const std::vector<std::string>& values,
+            CONFIG cfg,
+            const std::vector<std::string>& comments,
+            std::string filename = "");
 void version(const std::string& name);
 
 #endif // PORTAGECFG_HPP

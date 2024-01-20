@@ -8,6 +8,8 @@
 void usage(const std::string& name)
 {
     std::cout << name << ": usage:\n" << std::endl;
+    std::cout << "-c | --comment" << "\t\t\t\t" << "Optional comment to be added at the beginning of the configuration.\n";
+    std::cout << "-f | --filename" << "\t\t\t\t" << "Optional filename to write the configuration to. If not specified, package name will be used instead.\n";
     std::cout << "-h | --help" << "\t\t\t\t" << "Shows this help.\n";
     std::cout << "-l | --license <license>" << "\t\t" << "Write given license to portage's licenses folder.\n";
     std::cout << "-m | --mask" << "\t\t\t\t" << "Mask given package.\n";
@@ -20,7 +22,9 @@ void usage(const std::string& name)
 
 bool writeConfig(const std::string& package,
         const std::vector<std::string>& values,
-        CONFIG where)
+        CONFIG where,
+        const std::vector<std::string>& comments,
+        std::string filename)
 {
     if (values.empty())
         return true;
@@ -60,11 +64,15 @@ bool writeConfig(const std::string& package,
         }
     }
 
-    auto filename = package.substr(package.rfind('/') + 1, package.size());
+    if (filename.empty())
+        filename = package.substr(package.rfind('/') + 1, package.size());
     auto fullpath = path + filename;
     std::ofstream file(fullpath, std::ios::out | std::ios::app);
 
-    const std::string comment { "# This file was written by portagecfg." };
+    std::string comment { "# This file was written by portagecfg." };
+    for (const auto& c : comments)
+        comment += "\n# " + c;
+
     std::string contents { package };
 
     // If we want to mask or unmask a package, just write the package name to the corresponding directory.
