@@ -35,9 +35,12 @@ That'll write `app-emulation/qemu usbredir alsa bzip2` into `/etc/portage/packag
 
 `app-emulation/qemu ~amd64` into `/etc/portage/package.accept_keywords/qemu`
 
-## Another usage example
+## Other usage examples
+### Usage example 1 (continues)
 ![Usage example](screenshots/usage-example.png)
+### Usage example 1 (continued)
 ![Usage example 2](screenshots/usage-example2.png)
+### Usage example 2
 ![Usage example 3](screenshots/usage-example3.png)
 
 ## Help
