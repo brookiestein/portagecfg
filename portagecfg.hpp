@@ -21,7 +21,8 @@ bool writeConfig(const std::string& package,
             const std::vector<std::string>& values,
             CONFIG cfg,
             const std::vector<std::string>& comments,
-            std::string filename = "");
+            std::string filename = "",
+            bool default_comment = true);
 void version(const std::string& name);
 
 #endif // PORTAGECFG_HPP

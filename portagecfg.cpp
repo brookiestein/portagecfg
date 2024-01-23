@@ -9,6 +9,9 @@ void usage(const std::string& name)
 {
     std::cout << name << ": usage:\n" << std::endl;
     std::cout << "-c | --comment" << "\t\t\t\t" << "Optional comment to be added at the beginning of the configuration.\n";
+    std::cout << "-d | --default-comment" << "\t\t\t" << "Write default comment before config for you to know which config\n"
+                << "\t\t\t\t\t"
+                << "was written by you and which one was written by portagecfg.\n";
     std::cout << "-f | --filename" << "\t\t\t\t" << "Optional filename to write the configuration to. If not specified, package name will be used instead.\n";
     std::cout << "-h | --help" << "\t\t\t\t" << "Shows this help.\n";
     std::cout << "-l | --license <license>" << "\t\t" << "Write given license to portage's licenses folder.\n";
@@ -24,7 +27,8 @@ bool writeConfig(const std::string& package,
         const std::vector<std::string>& values,
         CONFIG where,
         const std::vector<std::string>& comments,
-        std::string filename)
+        std::string filename,
+        bool default_comment)
 {
     if (values.empty())
         return true;
@@ -69,7 +73,7 @@ bool writeConfig(const std::string& package,
     auto fullpath = path + filename;
     std::ofstream file(fullpath, std::ios::out | std::ios::app);
 
-    std::string comment { "# This file was written by portagecfg." };
+    std::string comment { default_comment ? "# This file was written by portagecfg." : "" };
     for (const auto& c : comments)
         comment += "\n# " + c;
 
@@ -83,7 +87,8 @@ bool writeConfig(const std::string& package,
 
     std::clog << "Writing: '" << contents << "' to: " << path + filename << std::endl;
 
-    file << comment << std::endl;
+    if (not comment.empty())
+        file << comment << std::endl;
     file << contents << std::endl;
     file.flush();
 

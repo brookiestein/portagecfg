@@ -18,24 +18,26 @@ int main(int argc, char* argv[])
         return ERROR_CODES::NOT_ENOUGH_ARGS;
     }
 
-    const char* const short_options { "c:f:hml:k:p:Uu:v" };
+    const char* const short_options { "c:df:hml:k:p:Uu:v" };
     const struct option long_options[] = {
-        { "comment",    required_argument,  nullptr,    'c' },
-        { "filename",   required_argument,  nullptr,    'f' },
-        { "help",       no_argument,        nullptr,	'h' },
-        { "mask",       no_argument,        nullptr,    'm' },
-        { "license",    required_argument,  nullptr,	'l' },
-        { "keyword",    required_argument,  nullptr,	'k' },
-        { "package",    required_argument,  nullptr,	'p' },
-        { "unmask",     no_argument,        nullptr,    'U' },
-        { "useflag",    required_argument,  nullptr,	'u' },
-        { "version",    no_argument,        nullptr,	'v' },
+        { "comment",            required_argument,  nullptr,    'c' },
+        { "default-comment",    required_argument,  nullptr,    'd' },
+        { "filename",           required_argument,  nullptr,    'f' },
+        { "help",               no_argument,        nullptr,	'h' },
+        { "mask",               no_argument,        nullptr,    'm' },
+        { "license",            required_argument,  nullptr,	'l' },
+        { "keyword",            required_argument,  nullptr,	'k' },
+        { "package",            required_argument,  nullptr,	'p' },
+        { "unmask",             no_argument,        nullptr,    'U' },
+        { "useflag",            required_argument,  nullptr,	'u' },
+        { "version",            no_argument,        nullptr,	'v' },
         { nullptr }
     };
 
     std::vector<std::string> comments;
     std::string filename {};
     bool mask {false};
+    bool default_comment {false};
     std::vector<std::string> licenses {};
     std::vector<std::string> keywords {};
     std::string package {};
@@ -47,6 +49,9 @@ int main(int argc, char* argv[])
         switch (opt) {
         case 'c':
             comments.push_back(std::string(optarg));
+            break;
+        case 'd':
+            default_comment = true;
             break;
         case 'f':
             filename = std::string(optarg);
@@ -101,11 +106,11 @@ int main(int argc, char* argv[])
     }
 
     if (mask)
-        writeConfig(package, { "" }, CONFIG::MASK, comments, filename);
+        writeConfig(package, { "" }, CONFIG::MASK, comments, filename, default_comment);
     else if (unmask)
-        writeConfig(package, { "" }, CONFIG::UNMASK, comments, filename);
+        writeConfig(package, { "" }, CONFIG::UNMASK, comments, filename, default_comment);
 
-    writeConfig(package, licenses, CONFIG::LICENSE, comments, filename);
-    writeConfig(package, keywords, CONFIG::KEYWORD, comments, filename);
-    writeConfig(package, useflags, CONFIG::USEFLAG, comments, filename);
+    writeConfig(package, licenses, CONFIG::LICENSE, comments, filename, default_comment);
+    writeConfig(package, keywords, CONFIG::KEYWORD, comments, filename, default_comment);
+    writeConfig(package, useflags, CONFIG::USEFLAG, comments, filename, default_comment);
 }
