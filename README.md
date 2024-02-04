@@ -41,9 +41,9 @@ That'll write `app-emulation/qemu usbredir alsa bzip2` into `/etc/portage/packag
 ### Usage example 1 (continued)
 ![Usage example 2](screenshots/usage-example2.png)
 ### Usage example 2
-![Usage example 3](screenshots/usage-example3.png)
-### Usage example 4
-![Usage example 4](screenshots/usage-example4.png)
+![Usage example 2](screenshots/usage-example3.png)
+### Usage example 3
+![Usage example 3](screenshots/usage-example4.png)
 
 ## Help
 ![Help](screenshots/help.png)
