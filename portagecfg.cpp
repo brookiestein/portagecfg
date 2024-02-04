@@ -18,9 +18,12 @@ void usage(const std::string& name)
     std::cout << "-m | --mask" << "\t\t\t\t" << "Mask given package.\n";
     std::cout << "-k | --keyword <keyword>" << "\t\t" << "Write given keyword to portage's keywords folder.\n";
     std::cout << "-p | --package <category/package_name>" << '\t' << "The package in question. This option is mandatory!\n";
+    std::cout << "-r | --run-portage" << "\t\t\t" << "Re-execute portage's install command. This will run: emerge <category/package_name>. (1)\n";
     std::cout << "-u | --useflag <use flag>" << "\t\t" << "Write given use flag to portage's use flags folder.\n";
     std::cout << "-U | --unmask" << "\t\t\t\t" << "Unmask given package.\n";
     std::cout << "-v | --version" << "\t\t\t\t" << "Shows this program's version." << std::endl;
+    std::cout << '\n' << "1) When telling " << name << " to re-run portage in order to get your program installed, don't expect portage's output to be\n"
+                        "the same as if you were running portage by yourself. Its output is just piped to your terminal.\n";
 }
 
 bool writeConfig(const std::string& package,

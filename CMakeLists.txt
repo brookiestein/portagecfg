@@ -12,6 +12,8 @@ set(PROJECT_SOURCES
 	portagecfg.hpp
 	portagecfg.cpp
     version.hpp
+    run_command.hpp
+    run_command.cpp
 )
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})

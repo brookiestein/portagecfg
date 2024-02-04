@@ -6,6 +6,7 @@
 #include <unistd.h>
 
 #include "portagecfg.hpp"
+#include "run_command.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -18,16 +19,17 @@ int main(int argc, char* argv[])
         return ERROR_CODES::NOT_ENOUGH_ARGS;
     }
 
-    const char* const short_options { "c:df:hml:k:p:Uu:v" };
+    const char* const short_options { "c:df:hml:k:p:rUu:v" };
     const struct option long_options[] = {
         { "comment",            required_argument,  nullptr,    'c' },
-        { "default-comment",    required_argument,  nullptr,    'd' },
+        { "default-comment",    no_argument,        nullptr,    'd' },
         { "filename",           required_argument,  nullptr,    'f' },
         { "help",               no_argument,        nullptr,	'h' },
         { "mask",               no_argument,        nullptr,    'm' },
         { "license",            required_argument,  nullptr,	'l' },
         { "keyword",            required_argument,  nullptr,	'k' },
         { "package",            required_argument,  nullptr,	'p' },
+        { "run-portage",        no_argument,        nullptr,    'r' },
         { "unmask",             no_argument,        nullptr,    'U' },
         { "useflag",            required_argument,  nullptr,	'u' },
         { "version",            no_argument,        nullptr,	'v' },
@@ -43,6 +45,7 @@ int main(int argc, char* argv[])
     std::string package {};
     bool unmask {false};
     std::vector<std::string> useflags {};
+    bool reexec_portage {false};
 
     int opt {};
     while ((opt = getopt_long(argc, argv, short_options, long_options, nullptr)) != -1) {
@@ -74,6 +77,9 @@ int main(int argc, char* argv[])
             break;
         case 'p':
             package = std::string(optarg);
+            break;
+        case 'r':
+            reexec_portage = true;
             break;
         case 'U':
             unmask = true;
@@ -113,4 +119,7 @@ int main(int argc, char* argv[])
     writeConfig(package, licenses, CONFIG::LICENSE, comments, filename, default_comment);
     writeConfig(package, keywords, CONFIG::KEYWORD, comments, filename, default_comment);
     writeConfig(package, useflags, CONFIG::USEFLAG, comments, filename, default_comment);
+
+    if (reexec_portage)
+        runPortage(package);
 }
