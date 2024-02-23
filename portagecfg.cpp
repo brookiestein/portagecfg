@@ -19,6 +19,9 @@ void usage(const std::string& name)
     std::cout << "-k | --keyword <keyword>" << "\t\t" << "Write given keyword to portage's keywords folder.\n";
     std::cout << "-p | --package <category/package_name>" << '\t' << "The package in question. This option is mandatory!\n";
     std::cout << "-r | --run-portage" << "\t\t\t" << "Re-execute portage's install command. This will run: emerge <category/package_name>. (1)\n";
+    std::cout << "-t | --translate-error-code"
+              << "\t\t"
+              << "Use this option to know why " << name << " is giving you some kind of error.\n";
     std::cout << "-u | --useflag <use flag>" << "\t\t" << "Write given use flag to portage's use flags folder.\n";
     std::cout << "-U | --unmask" << "\t\t\t\t" << "Unmask given package.\n";
     std::cout << "-v | --version" << "\t\t\t\t" << "Shows this program's version." << std::endl;

@@ -8,6 +8,8 @@
 #include "portagecfg.hpp"
 #include "run_command.hpp"
 
+void translateErrorCode(ERROR_CODES code, bool translate);
+
 int main(int argc, char* argv[])
 {
     auto name { std::string(argv[0]) };
@@ -15,11 +17,13 @@ int main(int argc, char* argv[])
         name = name.substr(name.rfind('/') + 1, name.size());
 
     if (argc == 1) {
+        translateErrorCode(ERROR_CODES::NOT_ENOUGH_ARGS, true);
+        std::cout << std::endl;
         usage(name);
         return ERROR_CODES::NOT_ENOUGH_ARGS;
     }
 
-    const char* const short_options { "c:df:hml:k:p:rUu:v" };
+    const char* const short_options { "c:df:hml:k:p:rtUu:v" };
     const struct option long_options[] = {
         { "comment",            required_argument,  nullptr,    'c' },
         { "default-comment",    no_argument,        nullptr,    'd' },
@@ -30,6 +34,7 @@ int main(int argc, char* argv[])
         { "keyword",            required_argument,  nullptr,	'k' },
         { "package",            required_argument,  nullptr,	'p' },
         { "run-portage",        no_argument,        nullptr,    'r' },
+        { "translate-error-code",no_argument,       nullptr,    't' },
         { "unmask",             no_argument,        nullptr,    'U' },
         { "useflag",            required_argument,  nullptr,	'u' },
         { "version",            no_argument,        nullptr,	'v' },
@@ -46,6 +51,7 @@ int main(int argc, char* argv[])
     bool unmask {false};
     std::vector<std::string> useflags {};
     bool reexec_portage {false};
+    bool translate_error_code {false};
 
     int opt {};
     while ((opt = getopt_long(argc, argv, short_options, long_options, nullptr)) != -1) {
@@ -81,6 +87,9 @@ int main(int argc, char* argv[])
         case 'r':
             reexec_portage = true;
             break;
+        case 't':
+            translate_error_code = true;
+            break;
         case 'U':
             unmask = true;
             if (mask) {
@@ -103,11 +112,12 @@ int main(int argc, char* argv[])
         std::cerr << "No enough rights, you must run me as root.\n";
         std::clog << "What I'm going to do is to write in portage's folder,\n"
             "and that directory belongs to root, so I need rights to write in them." << std::endl;
+        translateErrorCode(ERROR_CODES::NOT_ENOUGH_PERMISSIONS, translate_error_code);
         return ERROR_CODES::NOT_ENOUGH_PERMISSIONS;
     }
 
     if (package.empty()) {
-        std::cerr << "Package wasn't provided." << std::endl;
+        translateErrorCode(ERROR_CODES::PACKAGE_NOT_PROVIDED, translate_error_code);
         return ERROR_CODES::PACKAGE_NOT_PROVIDED;
     }
 
@@ -122,4 +132,24 @@ int main(int argc, char* argv[])
 
     if (reexec_portage)
         runPortage(package);
+}
+
+void translateErrorCode(ERROR_CODES code, bool translate)
+{
+    if (not translate)
+        return;
+
+    switch (code) {
+    case SUCCESS:
+        break;
+    case NOT_ENOUGH_ARGS:
+        std::cout << "No enough arguments were provided." << std::endl;
+        break;
+    case NOT_ENOUGH_PERMISSIONS:
+        std::cout << "Current user doesn't have enough rights to perform the actions this program does." << std::endl;
+        break;
+    case PACKAGE_NOT_PROVIDED:
+        std::cout << "The package which would be configured in portage wasn't provided." << std::endl;
+        break;
+    }
 }
