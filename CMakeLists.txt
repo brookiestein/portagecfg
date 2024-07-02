@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.27)
 
 set(PROJECT_NAME portagecfg)
-project(${PROJECT_NAME} LANGUAGES CXX)
+project(${PROJECT_NAME} VERSION 1.5.0 LANGUAGES CXX)
+
+add_compile_definitions(PROJECT_VERSION="${PROJECT_VERSION}")
 
 include(GNUInstallDirs)
 
@@ -11,7 +13,6 @@ set(PROJECT_SOURCES
 	main.cpp
 	portagecfg.hpp
 	portagecfg.cpp
-    version.hpp
     run_command.hpp
     run_command.cpp
 )

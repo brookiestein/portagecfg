@@ -1,5 +1,4 @@
 #include "portagecfg.hpp"
-#include "version.hpp"
 
 #include <iostream>
 #include <filesystem>
@@ -103,5 +102,5 @@ bool writeConfig(const std::string& package,
 
 void version(const std::string& name)
 {
-    std::cout << name << " version " << VERSION << std::endl;
+    std::cout << name << " version " << PROJECT_VERSION << std::endl;
 }
