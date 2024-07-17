@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>i18n/portagecfg_es_US.ts</file>
+        <file>i18n/portagecfg_es_US.qm</file>
+    </qresource>
+</RCC>
