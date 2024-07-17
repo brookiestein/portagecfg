@@ -35,7 +35,7 @@ That will write `sys-kernel/gentoo-sources symlink` into `/etc/portage/package.u
 You can write several USE flags using either of these notations:
 ```
 portagecfg -p app-emulation/qemu --useflags="usbredir alsa bzip2"
-portagecfg -p app-emulation/qemu -u usbredir\ alsa\ bzip2 -k
+portagecfg -p app-emulation/qemu -u usbredir\ alsa\ bzip2
 ```
 Both are valid ways of passing several values to any of the available options.
 
