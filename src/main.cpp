@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationVersion(PROJECT_VERSION);
     QCoreApplication a(argc, argv);
     QCommandLineParser parser;
+    parser.setApplicationDescription(PROJECT_DESCRIPTION);
 
     QTranslator translator;
     const QStringList uiLanguages = QLocale::system().uiLanguages();

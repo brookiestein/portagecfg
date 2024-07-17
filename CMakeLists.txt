@@ -15,6 +15,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_compile_definitions(PROJECT_NAME="${PROJECT_NAME}")
 add_compile_definitions(PROJECT_VERSION="${PROJECT_VERSION}")
+add_compile_definitions(PROJECT_DESCRIPTION="${PROJECT_DESCRIPTION}")
 add_compile_definitions(RED="\\033[1;31m")
 add_compile_definitions(GREEN="\\033[1;32m")
 add_compile_definitions(YELLOW="\\033[1;33m")

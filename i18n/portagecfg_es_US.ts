@@ -4,22 +4,22 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/main.cpp" line="47"/>
+        <location filename="../src/main.cpp" line="48"/>
         <source>Optional filename to write configuration to. Package name will be used if not specified.</source>
         <translation>Nombre de archivo opcional donde escribir la configuración. El nombre del paquete se usará si no se especifica.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="53"/>
+        <location filename="../src/main.cpp" line="54"/>
         <source>Write given keyword to Portage&apos;s keywords folder. Pass - for ~amd64.</source>
         <translation>Escribir el keyword dado a la carpeta de keywords de Portage. Pasa - para ~amd64.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="59"/>
+        <location filename="../src/main.cpp" line="60"/>
         <source>Write given license to Portage&apos;s licenses folder.</source>
         <translation>Escribir la licencia dada a la carpeta de licencias de Portage.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="65"/>
+        <location filename="../src/main.cpp" line="66"/>
         <source>Mask given package.</source>
         <translation>Enmascara el paquete dado.</translation>
     </message>
@@ -28,59 +28,59 @@
         <translation type="vanished">Escribe el keyword dado a la carpeta de keywords de Portage. ~amd64 será escrito si no se especifica ninguno con esta opción.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="33"/>
+        <location filename="../src/main.cpp" line="34"/>
         <source>Write given env config to Portage&apos;s global env folder.</source>
         <translation>Escribe la configuración env dada a la carpeta env global de Portage.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="39"/>
+        <location filename="../src/main.cpp" line="40"/>
         <source>Write given env config to Portage&apos;s package env folder.
 Note that given env config should exist in /etc/portage/env for portage to work as expected!</source>
         <translation>Escribir la configuración env dada a la carpeta env para paquetes de Portage.
 ¡Toma en cuenta que la configuración env dada debería existir en /etc/portage/env para que portage funcione como se espera!</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="60"/>
+        <location filename="../src/main.cpp" line="61"/>
         <source>licenses</source>
         <translation>licencias</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="70"/>
+        <location filename="../src/main.cpp" line="71"/>
         <source>The package in question. This option is mandatory.</source>
         <translation>El paquete en cuestión. Esta opción es obligatoria.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="75"/>
+        <location filename="../src/main.cpp" line="76"/>
         <source>Write given USE flags to Portage&apos;s USE flags folder.</source>
         <translation>Escribe las USE flags dadas a la carpeta de USE flags de Portage.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="81"/>
+        <location filename="../src/main.cpp" line="82"/>
         <source>Unmask given package.</source>
         <translation>Desenmascara el paquete dado.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="86"/>
+        <location filename="../src/main.cpp" line="87"/>
         <source>Describe every given step.</source>
         <translation>Describir cada paso dado.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="102"/>
+        <location filename="../src/main.cpp" line="103"/>
         <source>Superuser rights needed. Portage&apos;s directories belong to root. Can&apos;t write there as %1.</source>
         <translation>Se necesitan permisos de super usuario. Las carpetas de Portage pertenecen a root. No se puede escribir ahí como %1.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="110"/>
+        <location filename="../src/main.cpp" line="111"/>
         <source>Package wasn&apos;t provided.</source>
         <translation>El paquete no fue especificado.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="115"/>
+        <location filename="../src/main.cpp" line="116"/>
         <source>Both mask and unmask options were provided where just one at a time is allowed.</source>
         <translation>Tanto mask como unmask fueron especificadas donde sólo una a la vez está permitido.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="125"/>
+        <location filename="../src/main.cpp" line="126"/>
         <source>Filename must be provided.</source>
         <translation>El nombre del archivo debe ser especificado.</translation>
     </message>
