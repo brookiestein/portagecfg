@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 #include <QCommandLineOption>
 #include <QCommandLineParser>
@@ -221,19 +222,52 @@ bool fixPackageName(QString &packageName, Logger *logger)
         qInfo().noquote() << i++ << value;
     }
 
-    int selection = -1;
+    std::string largeSelection;
+    int shortSelection = -1;
     while (true) {
         std::cout << QObject::tr("What's the correct category for package %1? ").arg(packageName).toStdString();
-        std::cin >> selection;
-        if (selection < 0 or selection >= categories.size()) {
-            qCritical().noquote() << QObject::tr("There isn't such a category.");
+        std::getline(std::cin, largeSelection);
+
+        QString s(largeSelection.c_str());
+        if (s.isEmpty()) {
+            qCritical().noquote() << QObject::tr("You wrote nothing.");
             continue;
         }
 
-        break;
+        bool ok {false};
+        shortSelection = s.toInt(&ok);
+
+        if (not ok) {
+            shortSelection = s.split(" ")[0].toInt(&ok);
+        }
+
+        if (ok) {
+            if (shortSelection <= 0 or shortSelection >= categories.size()) {
+                qCritical().noquote() << QObject::tr("There isn't such a category.");
+                continue;
+            }
+
+            --shortSelection; /* Remember Lists are 0-indexed? */
+            break;
+        }
+
+        /* If arrived here, user didn't enter a number, let's check if large option is valid. */
+        for (const auto &category : categories) {
+            if (category.toLower() == s.toLower()) {
+                shortSelection = categories.indexOf(category);
+                ok = true;
+                break;
+            }
+        }
+
+        if (ok) {
+            break;
+        }
+
+        qCritical().noquote() << QObject::tr("There isn't such a category.");
     }
 
-    packageName = QString("%1/%2").arg(categories[selection - 1], packageName);
+    packageName = QString("%1/%2").arg(categories[shortSelection], packageName);
 
     return true;
 }
