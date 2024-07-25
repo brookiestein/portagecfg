@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.28)
 
 project(portagecfg
-    VERSION 2.0.0
+    VERSION 2.1.0
     LANGUAGES CXX
     DESCRIPTION "Utility to write Portage config files in an easy manner."
 )
@@ -16,6 +16,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_definitions(PROJECT_NAME="${PROJECT_NAME}")
 add_compile_definitions(PROJECT_VERSION="${PROJECT_VERSION}")
 add_compile_definitions(PROJECT_DESCRIPTION="${PROJECT_DESCRIPTION}")
+add_compile_definitions(PORTAGE_REPOS_DIR="/var/db/repos/")
 add_compile_definitions(RED="\\033[1;31m")
 add_compile_definitions(GREEN="\\033[1;32m")
 add_compile_definitions(YELLOW="\\033[1;33m")

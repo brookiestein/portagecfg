@@ -1,14 +1,21 @@
+#include <iostream>
+
 #include <QCommandLineOption>
 #include <QCommandLineParser>
 #include <QCoreApplication>
+#include <QDirIterator>
 #include <QLocale>
+#include <QRegularExpression>
 #include <QTranslator>
+#include <QSet>
 #include <QSharedPointer>
 
 #include <unistd.h>
 
 #include "logger.hpp"
 #include "writer.hpp"
+
+bool fixPackageName(QString &packageName, Logger *logger);
 
 int main(int argc, char *argv[])
 {
@@ -118,6 +125,13 @@ int main(int argc, char *argv[])
         );
     }
 
+    if (not fixPackageName(package, logger.data())) {
+        logger->log(
+            QObject::tr("Package: %1 wasn't found on your system.").arg(package),
+            Logger::TYPE::FATAL
+        );
+    }
+
     Writer writer(package, parser.value("filename"));
     QObject::connect(&writer, &Writer::done, &a, &QCoreApplication::quit, Qt::QueuedConnection);
 
@@ -157,4 +171,69 @@ int main(int argc, char *argv[])
     }
 
     return a.exec();
+}
+
+bool fixPackageName(QString &packageName, Logger *logger)
+{
+    QRegularExpression regex("\\w+/\\w+");
+    if (packageName.contains(regex)) {
+        logger->log(QObject::tr("Full package name provided."));
+        return true;
+    }
+
+    logger->log(
+        QObject::tr("Only package name was provided. Looking for full package name. Please wait a second...")
+    );
+
+    QSet<QString> matches;
+    QList<QString> categories;
+    regex = QRegularExpression(QString("/.+%1-[0-9]+.+ebuild$").arg(packageName));
+    QDirIterator iterator(PORTAGE_REPOS_DIR, QDirIterator::Subdirectories);
+    while (iterator.hasNext()) {
+        QString path = iterator.next();
+        if (path.contains(regex)) {
+            /* Remove ebuild file, e.g. portagecfg-VERSION.ebuild */
+            path = path.mid(0, path.lastIndexOf('/'));
+            /*
+             * Remove package name, normally used as a folder containing
+             * all files required by Portage.
+             */
+            path = path.mid(0, path.lastIndexOf('/'));
+            /* Get actual category getting rid of /var/db/repos/REPO/ */
+            path = path.mid(path.lastIndexOf('/') + 1, path.size());
+            matches.insert(path);
+        }
+    }
+
+    categories = matches.values();
+
+    if (categories.isEmpty()) {
+        return false;
+    } else if (categories.size() == 1) {
+        packageName = QString("%1/%2").arg(categories[0], packageName);
+        return true;
+    }
+
+    qInfo().noquote() << QObject::tr("Found %1 categories for package %2.")
+                   .arg(QString::number(categories.size()), packageName);
+    int i = 1;
+    for (const auto &value : categories) {
+        qInfo().noquote() << i++ << value;
+    }
+
+    int selection = -1;
+    while (true) {
+        std::cout << QObject::tr("What's the correct category for package %1? ").arg(packageName).toStdString();
+        std::cin >> selection;
+        if (selection < 0 or selection >= categories.size()) {
+            qCritical().noquote() << QObject::tr("There isn't such a category.");
+            continue;
+        }
+
+        break;
+    }
+
+    packageName = QString("%1/%2").arg(categories[selection - 1], packageName);
+
+    return true;
 }
