@@ -26,7 +26,8 @@ add_compile_definitions(NO_COLOR="\\033[0m")
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
-find_package(Qt6 REQUIRED COMPONENTS LinguistTools)
+# Because on Gentoo LinguistTools max version is still 5, but change it if you already have version 6.
+find_package(Qt5 REQUIRED COMPONENTS LinguistTools)
 
 set(TS_FILES portagecfg_es_US.ts)
 list(TRANSFORM TS_FILES PREPEND "i18n/")
