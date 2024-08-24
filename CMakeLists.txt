@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.28)
 
 project(portagecfg
-    VERSION 2.1.1
+    VERSION 2.1.2
     LANGUAGES CXX
     DESCRIPTION "Utility to write Portage config files in an easy manner."
 )
@@ -24,10 +24,7 @@ add_compile_definitions(BLUE="\\033[1;34m")
 add_compile_definitions(WHITE="\\033[1;97m")
 add_compile_definitions(NO_COLOR="\\033[0m")
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
-# Because on Gentoo LinguistTools max version is still 5, but change it if you already have version 6.
-find_package(Qt5 REQUIRED COMPONENTS LinguistTools)
+find_package(Qt6 REQUIRED COMPONENTS Core LinguistTools)
 
 set(TS_FILES portagecfg_es_US.ts)
 list(TRANSFORM TS_FILES PREPEND "i18n/")
@@ -44,32 +41,11 @@ set(PROJECT_SOURCES
 
 list(TRANSFORM PROJECT_SOURCES PREPEND "src/")
 
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(${PROJECT_NAME}
-        MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
-        ${QM_FILES}
-    )
-
-# Define target properties for Android with Qt 6 as:
-#    set_property(TARGET portagecfg APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
-# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
-else()
-    if(ANDROID)
-        add_library(${PROJECT_NAME} SHARED
-            ${PROJECT_SOURCES}
-            ${QM_FILES}
-        )
-# Define properties for Android with Qt 5 after find_package() calls as:
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-    else()
-        add_executable(${PROJECT_NAME}
-            ${PROJECT_SOURCES}
-            ${QM_FILES}
-        )
-    endif()
-endif()
+qt_add_executable(${PROJECT_NAME}
+    MANUAL_FINALIZATION
+    ${PROJECT_SOURCES}
+    ${QM_FILES}
+)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Core)
 
@@ -81,6 +57,4 @@ install(TARGETS ${PROJECT_NAME}
 
 install(FILES ${QM_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/${PROJECT_NAME}/translations)
 
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_finalize_executable(${PROJECT_NAME})
-endif()
+qt_finalize_executable(${PROJECT_NAME})

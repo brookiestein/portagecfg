@@ -4,12 +4,13 @@
 #include <QCommandLineOption>
 #include <QCommandLineParser>
 #include <QCoreApplication>
+#include <QDebug>
 #include <QDirIterator>
 #include <QLocale>
 #include <QRegularExpression>
-#include <QTranslator>
 #include <QSet>
 #include <QSharedPointer>
+#include <QTranslator>
 
 #include <unistd.h>
 
