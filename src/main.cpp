@@ -243,7 +243,7 @@ bool fixPackageName(QString &packageName, Logger *logger)
         }
 
         if (ok) {
-            if (shortSelection <= 0 or shortSelection >= categories.size()) {
+            if (shortSelection <= 0 or shortSelection > categories.size()) {
                 qCritical().noquote() << QObject::tr("There isn't such a category.");
                 continue;
             }
