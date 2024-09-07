@@ -28,7 +28,10 @@ void Writer::setFilename(const QString &filename)
 void Writer::write(Writer::TYPE type, const QString &values)
 {
     if (values.isEmpty() and type != Writer::TYPE::MASK and type != Writer::TYPE::UNMASK) {
-        m_logger->log(tr("Values weren't provided for package: %1").arg(m_package), Logger::TYPE::ERROR);
+        m_logger->log(
+            tr("Values weren't provided for package: %1").arg(m_package),
+            Logger::TYPE::ERROR
+        );
         return;
     }
 
@@ -54,15 +57,36 @@ void Writer::write(Writer::TYPE type, const QString &values)
 
     contents = contents.trimmed();
 
-    m_logger->log(tr("Writing %1'%2'%3 to %4%5%6.").arg(GREEN, contents, NO_COLOR, BLUE, fullPath, NO_COLOR));
+    m_logger->log(
+        tr("Writing %1'%2'%3 to %4%5%6.")
+            .arg(GREEN, contents, NO_COLOR, BLUE, fullPath, NO_COLOR)
+    );
 
     contents += "\n";
 
     QFile file(QString("%1%2%3").arg(folder, QDir::separator(), m_filename));
     if (not file.open(QIODevice::Append)) {
-        m_logger->log(tr("Could not open file: '%1' to write config to.").arg(m_filename), Logger::TYPE::FATAL);
+        m_logger->log(
+            tr("Could not open file: '%1' to write config to.")
+                .arg(m_filename),
+            Logger::TYPE::FATAL
+        );
     }
 
     file.write(QByteArray::fromStdString(contents.toStdString()));
+
+    if (type == TYPE::PACKAGE_ENV) {
+        /* values == env file config, e.g.: lto.conf */
+        auto path = QString("%1%2%3").arg(m_folders[TYPE::GLOBAL_ENV], QDir::separator(), values);
+        QFile file(path);
+        if (not file.exists()) {
+            m_logger->log(
+                tr("Env file: %1 doesn't exist. This config will do nothing if env file is not created.")
+                    .arg(file.fileName()),
+                Logger::TYPE::WARNING
+            );
+        }
+    }
+
     emit done();
 }

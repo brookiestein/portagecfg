@@ -158,29 +158,34 @@ Note that given env config should exist in /etc/portage/env for portage to work 
 <context>
     <name>Writer</name>
     <message>
-        <location filename="../src/writer.cpp" line="31"/>
+        <location filename="../src/writer.cpp" line="32"/>
         <source>Values weren&apos;t provided for package: %1</source>
         <translation>Los valores no fueron especificados para el paquete: %1</translation>
     </message>
     <message>
-        <location filename="../src/writer.cpp" line="39"/>
+        <location filename="../src/writer.cpp" line="42"/>
         <source>Directory: %1 doesn&apos;t exist. Creating it...</source>
         <translation>La carpeta: %1 no existe. Creándola...</translation>
     </message>
     <message>
-        <location filename="../src/writer.cpp" line="45"/>
+        <location filename="../src/writer.cpp" line="48"/>
         <source>Using package name as file name.</source>
         <translation>Usando el nombre del paquete como nombre para el archivo.</translation>
     </message>
     <message>
-        <location filename="../src/writer.cpp" line="57"/>
+        <location filename="../src/writer.cpp" line="61"/>
         <source>Writing %1&apos;%2&apos;%3 to %4%5%6.</source>
         <translation>Escribiendo %1&apos;%2&apos;%3 a %4%5%6.</translation>
     </message>
     <message>
-        <location filename="../src/writer.cpp" line="63"/>
+        <location filename="../src/writer.cpp" line="70"/>
         <source>Could not open file: &apos;%1&apos; to write config to.</source>
         <translation>No se pudo abrir el archiv: &apos;%1&apos; para escribir la configuración.</translation>
+    </message>
+    <message>
+        <location filename="../src/writer.cpp" line="84"/>
+        <source>Env file: %1 doesn&apos;t exist. This config will do nothing if env file is not created.</source>
+        <translation>El archivo env: %1 no existe. Esta configuración no hará nada si el archivo env no es creado.</translation>
     </message>
 </context>
 </TS>

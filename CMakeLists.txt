@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.28)
 
 project(portagecfg
-    VERSION 2.2.1
+    VERSION 2.2.2
     LANGUAGES CXX
     DESCRIPTION "Utility to write Portage config files in an easy manner."
 )
