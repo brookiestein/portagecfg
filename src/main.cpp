@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QDirIterator>
 #include <QLocale>
+#include <QProcess>
 #include <QRegularExpression>
 #include <QSet>
 #include <QSharedPointer>
@@ -81,6 +82,11 @@ int main(int argc, char *argv[])
     );
 
     parser.addOption(QCommandLineOption(
+        QStringList() << "r" << "run-portage",
+        QObject::tr("Run 'emerge --ask=n category/package' after writing given configuration."))
+    );
+
+    parser.addOption(QCommandLineOption(
         QStringList() << "u" << "useflags",
         QObject::tr("Write given USE flags to Portage's USE flags folder."),
         "USE flags")
@@ -135,7 +141,10 @@ int main(int argc, char *argv[])
     }
 
     Writer writer(package, parser.value("filename"));
-    QObject::connect(&writer, &Writer::done, &a, &QCoreApplication::quit, Qt::QueuedConnection);
+    /* Let Writer::done end program execution only when run-portage is not set. If it is, it'll take control of that. */
+    if (not parser.isSet("run-portage")) {
+        QObject::connect(&writer, &Writer::done, &a, &QCoreApplication::quit, Qt::QueuedConnection);
+    }
 
     if (parser.isSet("env-global")) {
         if (not parser.isSet("filename")) {
@@ -170,6 +179,43 @@ int main(int argc, char *argv[])
 
     if (parser.isSet("useflags")) {
         writer.write(Writer::TYPE::USEFLAGS, parser.value("useflags"));
+    }
+
+    QProcess process;
+
+    if (parser.isSet("run-portage")) {
+        QString program {"emerge"};
+        QStringList arguments;
+        arguments << "--ask=n" << package;
+
+        QObject::connect(&process, &QProcess::finished, &a, &QCoreApplication::quit, Qt::QueuedConnection);
+
+        QObject::connect(&process, &QProcess::stateChanged, [&] (QProcess::ProcessState newState) {
+            switch (newState)
+            {
+            case QProcess::NotRunning:
+                if (process.exitStatus() == QProcess::CrashExit or process.exitCode() != 0) {
+                    logger->log(
+                        QObject::tr("Portage didn't finish normally, exit code: %1. Please read its log files for more info!")
+                                .arg(QString::number(process.exitCode())
+                        )
+                    );
+                } else {
+                    logger->log(QObject::tr("Done!"));
+                }
+                break;
+            case QProcess::Starting:
+                logger->log(QObject::tr("Starting Portage with arguments: %1...").arg(arguments.join(" ")));
+                break;
+            case QProcess::Running:
+                logger->log(QObject::tr("Portage's running, please wait for it to finish."));
+                break;
+            }
+        });
+
+        process.setProgram(program);
+        process.setArguments(arguments);
+        process.start();
     }
 
     return a.exec();
