@@ -39,6 +39,13 @@ int main(int argc, char *argv[])
 
     parser.addHelpOption();
     parser.addVersionOption();
+
+    parser.addOption(QCommandLineOption(
+        QStringList() << "a" << "args",
+        QObject::tr("Optional Portage arguments. Default is: --ask=n."),
+        "args")
+    );
+
     parser.addOption(QCommandLineOption(
         QStringList() << "E" << "env-global",
         QObject::tr("Write given env config to Portage's global env folder."),
@@ -83,7 +90,7 @@ int main(int argc, char *argv[])
 
     parser.addOption(QCommandLineOption(
         QStringList() << "r" << "run-portage",
-        QObject::tr("Run 'emerge --ask=n category/package' after writing given configuration."))
+        QObject::tr("Run 'emerge <args> --ask=n category/package' after writing given configuration."))
     );
 
     parser.addOption(QCommandLineOption(
@@ -186,6 +193,9 @@ int main(int argc, char *argv[])
     if (parser.isSet("run-portage")) {
         QString program {"emerge"};
         QStringList arguments;
+        if (parser.isSet("args")) {
+            arguments << parser.value("args").split(" ");
+        }
         arguments << "--ask=n" << package;
 
         QObject::connect(&process, &QProcess::finished, &a, &QCoreApplication::quit, Qt::QueuedConnection);
