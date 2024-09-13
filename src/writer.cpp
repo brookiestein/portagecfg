@@ -3,9 +3,10 @@
 #include <QDir>
 #include <QFile>
 
-Writer::Writer(const QString &package, const QString &filename, QObject *parent)
+Writer::Writer(const QString &package, const QString &repo, const QString &filename, QObject *parent)
     : QObject{parent}
     , m_package(package)
+    , m_repo(repo)
     , m_filename(filename)
     , m_logger(Logger::instance())
 {
@@ -51,6 +52,10 @@ void Writer::write(Writer::TYPE type, const QString &values)
 
     auto fullPath = QString("%1%2%3").arg(folder, QDir::separator(), m_filename);
     QString contents = m_package;
+    if (not m_repo.isEmpty()) {
+        contents += "::" + m_repo;
+    }
+
     if (type != Writer::TYPE::MASK and type != Writer::TYPE::UNMASK) {
         contents += " " + values;
     }

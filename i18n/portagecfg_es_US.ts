@@ -54,52 +54,52 @@ Note that given env config should exist in /etc/portage/env for portage to work 
         <translation type="vanished">Ejecuta: &apos;emerge --ask=n categoría/paquete&apos; después de escribir las configuraciones dadas.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="98"/>
+        <location filename="../src/main.cpp" line="104"/>
         <source>Write given USE flags to Portage&apos;s USE flags folder.</source>
         <translation>Escribe las USE flags dadas a la carpeta de USE flags de Portage.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="104"/>
+        <location filename="../src/main.cpp" line="110"/>
         <source>Unmask given package.</source>
         <translation>Desenmascara el paquete dado.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="109"/>
+        <location filename="../src/main.cpp" line="115"/>
         <source>Describe every given step.</source>
         <translation>Describir cada paso dado.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="125"/>
+        <location filename="../src/main.cpp" line="131"/>
         <source>Superuser rights needed. Portage&apos;s directories belong to root. Can&apos;t write there as %1.</source>
         <translation>Se necesitan permisos de super usuario. Las carpetas de Portage pertenecen a root. No se puede escribir ahí como %1.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="133"/>
+        <location filename="../src/main.cpp" line="139"/>
         <source>Package wasn&apos;t provided.</source>
         <translation>El paquete no fue especificado.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="138"/>
+        <location filename="../src/main.cpp" line="144"/>
         <source>Both mask and unmask options were provided where just one at a time is allowed.</source>
         <translation>Tanto mask como unmask fueron especificadas donde sólo una a la vez está permitido.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="145"/>
+        <location filename="../src/main.cpp" line="151"/>
         <source>Package: %1 wasn&apos;t found on your system.</source>
         <translation>El paquete: %1 no fue enconteado en tu sistema.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="158"/>
+        <location filename="../src/main.cpp" line="164"/>
         <source>Filename must be provided.</source>
         <translation>El nombre del archivo debe ser especificado.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="214"/>
+        <location filename="../src/main.cpp" line="220"/>
         <source>Done!</source>
         <translation>¡Hecho!</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="209"/>
+        <location filename="../src/main.cpp" line="215"/>
         <source>Portage didn&apos;t finish normally, exit code: %1. Please read its log files for more info!</source>
         <translation>Portage no terminó normalmente, código de salida: %1. ¡Por favor, lee sus archivos de registros para más información!</translation>
     </message>
@@ -114,43 +114,53 @@ Note that given env config should exist in /etc/portage/env for portage to work 
         <translation>Ejecuta &apos;emerge &lt;args&gt; --ask=n categoría/paquete&apos; después de escribir las configuraciones dadas.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="218"/>
+        <location filename="../src/main.cpp" line="98"/>
+        <source>Optionally be more specific about what repository is the package in.</source>
+        <translation>Opcionalmente ser más específico acerca de en qué repositorio está el paquete.</translation>
+    </message>
+    <message>
+        <location filename="../src/main.cpp" line="99"/>
+        <source>repo-name</source>
+        <translation>nombre-del-repo</translation>
+    </message>
+    <message>
+        <location filename="../src/main.cpp" line="224"/>
         <source>Starting Portage with arguments: %1...</source>
         <translation>Ejecutando Portage con los argumentos: %1...</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="221"/>
+        <location filename="../src/main.cpp" line="227"/>
         <source>Portage&apos;s running, please wait for it to finish.</source>
         <translation>Portage se está ejecutando, por favor, espera a que finalice.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="238"/>
+        <location filename="../src/main.cpp" line="244"/>
         <source>Full package name provided.</source>
         <translation>Nombre de paquete completo provisto.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="243"/>
+        <location filename="../src/main.cpp" line="249"/>
         <source>Only package name was provided. Looking for full package name. Please wait a second...</source>
         <translation>Sólo el nombre del paquete fue provisto. Buscando el nombre del paquete completo. Por favor, espera un segundo...</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="275"/>
+        <location filename="../src/main.cpp" line="281"/>
         <source>Found %1 categories for package %2.</source>
         <translation>Se encontraron %1 categorías para el paquete %2.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="285"/>
+        <location filename="../src/main.cpp" line="291"/>
         <source>What&apos;s the correct category for package %1? </source>
         <translation>¿Cuál es la categoría correcta para el paquete %1? </translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="290"/>
+        <location filename="../src/main.cpp" line="296"/>
         <source>You wrote nothing.</source>
         <translation>No escribiste nada.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="303"/>
-        <location filename="../src/main.cpp" line="324"/>
+        <location filename="../src/main.cpp" line="309"/>
+        <location filename="../src/main.cpp" line="330"/>
         <source>There isn&apos;t such a category.</source>
         <translation>Esa categoría no está listada.</translation>
     </message>
@@ -158,32 +168,32 @@ Note that given env config should exist in /etc/portage/env for portage to work 
 <context>
     <name>Writer</name>
     <message>
-        <location filename="../src/writer.cpp" line="32"/>
+        <location filename="../src/writer.cpp" line="33"/>
         <source>Values weren&apos;t provided for package: %1</source>
         <translation>Los valores no fueron especificados para el paquete: %1</translation>
     </message>
     <message>
-        <location filename="../src/writer.cpp" line="42"/>
+        <location filename="../src/writer.cpp" line="43"/>
         <source>Directory: %1 doesn&apos;t exist. Creating it...</source>
         <translation>La carpeta: %1 no existe. Creándola...</translation>
     </message>
     <message>
-        <location filename="../src/writer.cpp" line="48"/>
+        <location filename="../src/writer.cpp" line="49"/>
         <source>Using package name as file name.</source>
         <translation>Usando el nombre del paquete como nombre para el archivo.</translation>
     </message>
     <message>
-        <location filename="../src/writer.cpp" line="61"/>
+        <location filename="../src/writer.cpp" line="66"/>
         <source>Writing %1&apos;%2&apos;%3 to %4%5%6.</source>
         <translation>Escribiendo %1&apos;%2&apos;%3 a %4%5%6.</translation>
     </message>
     <message>
-        <location filename="../src/writer.cpp" line="70"/>
+        <location filename="../src/writer.cpp" line="75"/>
         <source>Could not open file: &apos;%1&apos; to write config to.</source>
         <translation>No se pudo abrir el archiv: &apos;%1&apos; para escribir la configuración.</translation>
     </message>
     <message>
-        <location filename="../src/writer.cpp" line="84"/>
+        <location filename="../src/writer.cpp" line="89"/>
         <source>Env file: %1 doesn&apos;t exist. This config will do nothing if env file is not created.</source>
         <translation>El archivo env: %1 no existe. Esta configuración no hará nada si el archivo env no es creado.</translation>
     </message>

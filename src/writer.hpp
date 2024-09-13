@@ -11,13 +11,15 @@ class Writer : public QObject
     Q_OBJECT
 public:
     enum class TYPE { GLOBAL_ENV = 0, PACKAGE_ENV, LICENSE, KEYWORD, MASK, USEFLAGS, UNMASK };
-    explicit Writer(const QString &package, const QString &filename = QString(), QObject *parent = nullptr);
+    explicit Writer(const QString &package, const QString &repo = QString(),
+                    const QString &filename = QString(), QObject *parent = nullptr);
     void setFilename(const QString &filename);
     void setValues(const QVector<QString> &values);
     void write(TYPE type, const QString &values = QString());
 private:
     QString m_filename;
     QString m_package;
+    QString m_repo;
     std::map<TYPE, QString> m_folders;
     Logger *m_logger;
 signals:

@@ -94,6 +94,12 @@ int main(int argc, char *argv[])
     );
 
     parser.addOption(QCommandLineOption(
+        QStringList() << "R" << "repo",
+        QObject::tr("Optionally be more specific about what repository is the package in."),
+        QObject::tr("repo-name"))
+    );
+
+    parser.addOption(QCommandLineOption(
         QStringList() << "u" << "useflags",
         QObject::tr("Write given USE flags to Portage's USE flags folder."),
         "USE flags")
@@ -147,7 +153,7 @@ int main(int argc, char *argv[])
         );
     }
 
-    Writer writer(package, parser.value("filename"));
+    Writer writer(package, parser.value("repo"), parser.value("filename"));
     /* Let Writer::done end program execution only when run-portage is not set. If it is, it'll take control of that. */
     if (not parser.isSet("run-portage")) {
         QObject::connect(&writer, &Writer::done, &a, &QCoreApplication::quit, Qt::QueuedConnection);
