@@ -19,6 +19,9 @@
 #include "writer.hpp"
 
 bool fixPackageName(QString &packageName, Logger *logger);
+QVector<Writer::TYPE> parseCommentWriter(const QString &places,
+                                         Logger *logger,
+                                         const QCommandLineParser &parser);
 
 int main(int argc, char *argv[])
 {
@@ -44,6 +47,12 @@ int main(int argc, char *argv[])
         QStringList() << "a" << "args",
         QObject::tr("Optional Portage arguments. Default is: --ask=n."),
         "args")
+    );
+
+    parser.addOption(QCommandLineOption(
+        QStringList() << "c" << "comment",
+        QObject::tr("Optionally write a comment for this configuration."),
+        "comment")
     );
 
     parser.addOption(QCommandLineOption(
@@ -115,6 +124,14 @@ int main(int argc, char *argv[])
         QObject::tr("Describe every given step."))
     );
 
+    parser.addOption(QCommandLineOption(
+        QStringList() << "w" << "where",
+        QObject::tr("Where to write comment specified with -c. "
+                    "Available options: all, env-global, keywords, env-package, licenses, mask, unmask, useflags. "
+                    "Options can be combined."),
+        "any-option")
+    );
+
     parser.process(a);
 
     bool verbose = parser.isSet("verbose");
@@ -153,7 +170,30 @@ int main(int argc, char *argv[])
         );
     }
 
-    Writer writer(package, parser.value("repo"), parser.value("filename"));
+    auto repo = parser.value("repo");
+    auto filename = parser.value("filename");
+    auto comment = parser.value("comment");
+    QVector<Writer::TYPE> where;
+
+    if (not comment.isEmpty()) {
+        if (parser.isSet("where")) {
+            where = parseCommentWriter(parser.value("where"), logger.data(), parser);
+        } else {
+            logger->log(
+                QObject::tr("No place to write comment to was specified, defaulting to everywhere."),
+                Logger::TYPE::WARNING
+            );
+
+            where.push_back(Writer::TYPE::ALL);
+        }
+    } else if (parser.isSet("where")) {
+        logger->log(
+            QObject::tr("-w/--where specified without specifying -c/--comment. No comment will be written anywhere."),
+            Logger::TYPE::WARNING
+        );
+    }
+
+    Writer writer(package, repo, filename, comment, where);
     /* Let Writer::done end program execution only when run-portage is not set. If it is, it'll take control of that. */
     if (not parser.isSet("run-portage")) {
         QObject::connect(&writer, &Writer::done, &a, &QCoreApplication::quit, Qt::QueuedConnection);
@@ -333,4 +373,53 @@ bool fixPackageName(QString &packageName, Logger *logger)
     packageName = QString("%1/%2").arg(categories[shortSelection], packageName);
 
     return true;
+}
+
+QVector<Writer::TYPE> parseCommentWriter(const QString &places, Logger *logger, const QCommandLineParser &parser)
+{
+    QMap<QString, Writer::TYPE> values;
+    values["env-global"] = Writer::TYPE::GLOBAL_ENV;
+    values["keyword"] = Writer::TYPE::KEYWORD;
+    values["env-package"] = Writer::TYPE::PACKAGE_ENV;
+    values["licenses"] = Writer::TYPE::LICENSE;
+    values["mask"] = Writer::TYPE::MASK;
+    values["unmask"] = Writer::TYPE::UNMASK;
+    values["use"] = Writer::TYPE::USEFLAGS;
+
+    QVector<Writer::TYPE> where;
+    QStringList listOfPlaces = places.split(" ");
+
+    if (places.isEmpty()) {
+        return {};
+    }
+
+    for (const auto &place : listOfPlaces) {
+        auto value = values.value(place.toLower(), Writer::TYPE::NOTHING);
+        if (value != Writer::TYPE::NOTHING) {
+            if (not parser.isSet(place.toLower())) {
+                logger->log(
+                    QObject::tr("Place '%1' is specified, but that config isn't. Ignoring it.").arg(place),
+                    Logger::TYPE::WARNING
+                );
+                continue;
+            }
+
+            where.push_back(value);
+            continue;
+        }
+
+        logger->log(
+            QObject::tr("Invalid option for writing comment to: '%1'.").arg(place),
+            Logger::TYPE::ERROR
+        );
+    }
+
+    if (where.isEmpty()) {
+        logger->log(
+            QObject::tr("No valid place to write comment to was provided. No comment will be written."),
+            Logger::TYPE::WARNING
+        );
+    }
+
+    return where;
 }

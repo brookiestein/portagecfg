@@ -3,11 +3,19 @@
 #include <QDir>
 #include <QFile>
 
-Writer::Writer(const QString &package, const QString &repo, const QString &filename, QObject *parent)
+Writer::Writer(const QString &package,
+        const QString &repo,
+        const QString &filename,
+        const QString &comment,
+        const QVector<Writer::TYPE> &where,
+        QObject *parent
+    )
     : QObject{parent}
     , m_package(package)
     , m_repo(repo)
     , m_filename(filename)
+    , m_comment(comment)
+    , m_where(where)
     , m_logger(Logger::instance())
 {
     const QString baseFolder = "/etc/portage/package.";
@@ -51,7 +59,20 @@ void Writer::write(Writer::TYPE type, const QString &values)
     }
 
     auto fullPath = QString("%1%2%3").arg(folder, QDir::separator(), m_filename);
-    QString contents = m_package;
+    QString contents;
+    bool writeComment {false};
+
+    if (m_where.contains(Writer::TYPE::ALL)) {
+        contents = QString("# %1\n%2").arg(m_comment, m_package);
+        writeComment = true;
+    } else if (m_where.contains(type)) {
+        contents = QString("# %1\n%2").arg(m_comment, m_package);
+        m_where.removeOne(type); /* Not to iterate over this configuration anymore. */
+        writeComment = true;
+    } else {
+        contents = m_package;
+    }
+
     if (not m_repo.isEmpty()) {
         contents += "::" + m_repo;
     }
@@ -62,10 +83,17 @@ void Writer::write(Writer::TYPE type, const QString &values)
 
     contents = contents.trimmed();
 
-    m_logger->log(
-        tr("Writing %1'%2'%3 to %4%5%6.")
-            .arg(GREEN, contents, NO_COLOR, BLUE, fullPath, NO_COLOR)
-    );
+    if (writeComment) {
+        m_logger->log(
+            tr("Writing:\n%1%2%3\nto %4%5%6.")
+                .arg(GREEN, contents, NO_COLOR, BLUE, fullPath, NO_COLOR)
+        );
+    } else {
+        m_logger->log(
+            tr("Writing %1'%2'%3 to %4%5%6.")
+                .arg(GREEN, contents, NO_COLOR, BLUE, fullPath, NO_COLOR)
+        );
+    }
 
     contents += "\n";
 
